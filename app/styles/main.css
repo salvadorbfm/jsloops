@@ -1,0 +1,9 @@
+.CodeMirror {
+  font-size: 30px;
+  height: 500px !important;
+}
+#editor {
+  margin: 0px auto;
+  height: 500px;
+  width: 80%;
+}

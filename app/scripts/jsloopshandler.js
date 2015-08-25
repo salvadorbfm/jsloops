@@ -7,7 +7,9 @@ function JSLoopsHandler(context) {
     value: this.initialCode,
     theme: '3024-night',
     mode:  'javascript',
+    keyMap: 'sublime',
     lineNumbers: true,
+    cursorScrollMargin: 2,
     tabSize: 2
   });
   this.engine = new JSLoopsEngine(context);

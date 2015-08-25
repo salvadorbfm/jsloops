@@ -1,9 +1,15 @@
+body {
+  background-color: black;
+}
+
 .CodeMirror {
   font-size: 30px;
-  height: 500px !important;
+  height: 750px !important;
 }
 #editor {
   margin: 0px auto;
-  height: 500px;
+  height: 750px;
   width: 80%;
+
+  border: 1px solid #bada55;
 }

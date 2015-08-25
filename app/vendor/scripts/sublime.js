@@ -420,8 +420,8 @@
     var indentUnit = cm.getOption("indentUnit");
 
     if (toStartOfLine && !/\S/.test(toStartOfLine) && column % indentUnit == 0) {
-      var prevIndent = new Pos(cursor.line,
-        CodeMirror.findColumn(toStartOfLine, column - indentUnit, indentUnit));
+      var prevIndent = new Pos(cursor.line);
+        // CodeMirror.findColumn(toStartOfLine, column - indentUnit, indentUnit));
 
       // If no smart delete is happening (due to tab sizing) just do a regular delete
       if (prevIndent.ch == cursor.ch) return CodeMirror.Pass;

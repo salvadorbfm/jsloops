@@ -2,7 +2,7 @@ function JSLoopsHandler(context) {
   var that = this;
   this.context = context;
   // this.initialCode = '// JSLoops - GDLJS 2015\n// - engine.DrumKick.trigger(steps[0]);\nfunction play(engine, steps) {\nconsole.log(steps);console.log(engine.context.currentTime);debugger;\n}\n';
-  this.initialCode = '// JSLoops - GDLJS 2015\n// - engine.DrumKick.trigger(steps[0]);\nfunction play(engine, steps) {\n\n}\n';
+  this.initialCode = '// JSLoops - GDLJS 2015\n// - engine.DrumKick.trigger(steps[0]);\n// - engine.DrumSnare.trigger(steps[0]);\n// - engine.DrumHiHat.trigger(steps[0]);\nfunction play(engine, steps) {\n  engine.DrumHiHat.trigger(steps[0]);\n}\n';
   this.editor = CodeMirror($('#editor')[0], {
     value: this.initialCode,
     theme: '3024-night',

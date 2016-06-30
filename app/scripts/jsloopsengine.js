@@ -95,41 +95,48 @@ function DrumHiHat(context) {
 }
 
 DrumHiHat.prototype.setup = function() {
-  this.noise = this.context.createBufferSource();
-  this.noise.buffer = AudioUtil.getNoiseBuffer(this.context);
-
-  var noiseFilter = this.context.createBiquadFilter();
-  noiseFilter.type = 'highpass';
-  noiseFilter.frequency.value = 500;
-  this.noise.connect(noiseFilter);
+  // Based on http://joesul.li/van/synthesizing-hi-hats/
+  var fundamental = 40,
+      ratios = [2, 3, 4.16, 5.43, 6.79, 8.21],
+      context = this.context,
+      that = this;
 
   this.noiseEnvelope = this.context.createGain();
-  noiseFilter.connect(this.noiseEnvelope);
+  this.ratios = ratios;
+  this.oscillators = [];
 
-  this.noiseEnvelope.connect(this.context.destination);
+  bandpass = context.createBiquadFilter();
+  bandpass.type = "bandpass";
+  bandpass.frequency.value = 10000;
 
-  this.osc = this.context.createOscillator();
-  this.osc.type = 'triangle';
+  highpass = context.createBiquadFilter();
+  highpass.type = "highpass";
+  highpass.frequency.value = 7000;
 
-  this.oscEnvelope = this.context.createGain();
-  this.osc.connect(this.oscEnvelope);
-  this.oscEnvelope.connect(this.context.destination);
+  bandpass.connect(highpass);
+  highpass.connect(this.noiseEnvelope);
+  this.noiseEnvelope.connect(context.destination);
+
+  ratios.forEach(function(ratio) {
+    var osc = context.createOscillator();
+    osc.type = "square";
+    osc.connect(bandpass);
+    osc.frequency.value = fundamental * ratio;
+    that.oscillators.push(osc);
+  });
+
 };
 
 DrumHiHat.prototype.trigger = function(time) {
   this.setup();
-
-  this.noiseEnvelope.gain.setValueAtTime(0.8, time);
-  this.noiseEnvelope.gain.exponentialRampToValueAtTime(0.01, time + 0.2);
-  this.noise.start(time)
-
-  this.osc.frequency.setValueAtTime(400, time);
-  this.oscEnvelope.gain.setValueAtTime(3.0, time);
-  this.oscEnvelope.gain.exponentialRampToValueAtTime(0.01, time + 0.1);
-  this.osc.start(time)
-
-  this.osc.stop(time + 0.2);
-  this.noise.stop(time + 0.2);
+  this.oscillators.forEach(function(oscillator) {
+    oscillator.start(time);
+    oscillator.stop(time + 0.3);
+  });
+  this.noiseEnvelope.gain.setValueAtTime(0.00001, time);
+  this.noiseEnvelope.gain.exponentialRampToValueAtTime(1, time + 0.02);
+  this.noiseEnvelope.gain.exponentialRampToValueAtTime(0.3, time + 0.03);
+  this.noiseEnvelope.gain.exponentialRampToValueAtTime(0.00001, time + 0.3);
 };
 
 function BasicSynth(context, notes) {

@@ -15,7 +15,6 @@ Global component that handles user events, code editor configuration, live reloa
 
 ## Dependencies
 * [CodeMirror](https://github.com/codemirror/codemirror)
-<!-- * [Tuna](https://github.com/Theodeus/tuna) -->
 
 ## How to run it
 * `npm install`
